@@ -1,0 +1,24 @@
+.title {
+  font-size: 40px;
+  text-align: center;
+  font-family: math;
+  margin: auto;
+  margin-top: 5vh;
+  margin-bottom: 2vh;
+  display: flex;
+}
+.title-snake {
+  margin: auto;
+  display: flex;
+}
+
+.snake-canvas {
+  border: 4px #402d33 solid;
+  margin: auto;
+  margin-top: 30px;
+  display: flex;
+}
+
+body {
+  background-color: #576d4d;
+}

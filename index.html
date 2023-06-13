@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="styling.css" />
+  </head>
+  <body>
+    <div>
+      <img class="title" src="img/title.png" />
+      <img class="title-snake" src="img/snake.png" />
+    </div>
+    <canvas
+      id="snake-game"
+      class="snake-canvas"
+      width="800"
+      height="800"
+    ></canvas>
+    <script>
+      const canvas = document.getElementById("snake-game");
+      const ctx = canvas.getContext("2d");
+      var snakeDirection = "right";
+      var snakePositions = [[0, 0]];
+
+      ctx.fillStyle = "#3f4f38";
+      ctx.fillRect(0, 0, 800, 800);
+
+      var gameState = Array.from(Array(80), () => new Array(80).fill(0));
+      gameState[0][0] = 1;
+
+      function drawState() {
+        for (var i = 0; i < 80; i++) {
+          for (var j = 0; j < 80; j++) {
+            switch (gameState[j][i]) {
+              case 0:
+                ctx.fillStyle = "#3f4f38";
+                break;
+              case 1:
+                ctx.fillStyle = "#402d33";
+                break;
+              case 2:
+                ctx.fillStyle = "#661e1e";
+                break;
+            }
+            ctx.fillRect(i * 10, j * 10, 10, 10);
+          }
+        }
+      }
+
+      function updateState() {
+        switch (snakeDirection) {
+          case "right":
+            if (
+              gameState[snakePositions[0][0]][snakePositions[0][1]] !== 2 &&
+              snakePositions[0][1] < 80
+            ) {
+              var oldPosition = snakePositions.pop();
+              gameState[oldPosition[0]][oldPosition[1]] = 0;
+              oldPosition[1]++;
+              snakePositions.push(oldPosition);
+              gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
+            }
+            break;
+        }
+      }
+
+      function gameLoop() {
+        setTimeout(() => {
+          updateState();
+          drawState();
+          requestAnimationFrame(gameLoop);
+        }, 1000 / 20);
+      }
+      requestAnimationFrame(gameLoop);
+    </script>
+  </body>
+</html>
