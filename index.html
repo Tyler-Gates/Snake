@@ -16,6 +16,12 @@
     ></canvas>
     <div class="button-option-list">
       <div class="apple-count-label">
+        <img src="img/score.png" />
+        <span id="score-count"></span>
+      </div>
+    </div>
+    <div class="button-option-list">
+      <div class="apple-count-label">
         <img src="img/appleCount.png" />
         <span id="apple-count"></span>
       </div>
@@ -37,7 +43,7 @@
       var snakePositions = [[5, 0]];
       var moveLock = false;
       var queuedMove = "";
-      var appleCount = 1;
+      var appleCount = 3;
       var startGameFlag = false;
       var eatenFoodFlag = true;
       var aliveFlag = true;
@@ -84,6 +90,10 @@
       const zero = new Image();
       zero.src = "img/zero.png";
 
+      const scoreImage = new Image();
+      scoreImage.src = "img/score.png";
+      var score = 1;
+
       ctx.fillStyle = "#3f4f38";
       ctx.fillRect(0, 0, 800, 800);
 
@@ -91,9 +101,18 @@
       gameState[5][0] = 1;
 
       const drawAppleCountList = document.getElementById("apple-count");
+      const drawScoreCountList = document.getElementById("score-count");
+      document.getElementById("score-count").value = score;
+      drawScoreCount();
 
       document.getElementById("apple-count").value = appleCount;
       drawAppleCount();
+
+      var opacity = 0.5;
+      var opacityFlipSwitch = false;
+
+      var eatApple = new Audio("audio/eatApple.wav");
+
       function appleCountManipulator(change) {
         appleCount = document.getElementById("apple-count").value;
         if (change) {
@@ -139,6 +158,45 @@
               break;
             case "9":
               drawAppleCountList.appendChild(nine.cloneNode(true));
+              break;
+          }
+        }
+      }
+
+      function drawScoreCount() {
+        const scoreCountString = score.toString();
+        drawScoreCountList.innerHTML = "";
+        for (var i = 0; i < scoreCountString.length; i++) {
+          switch (scoreCountString[i]) {
+            case "0":
+              drawScoreCountList.appendChild(zero.cloneNode(true));
+              break;
+            case "1":
+              drawScoreCountList.appendChild(one.cloneNode(true));
+              break;
+            case "2":
+              drawScoreCountList.appendChild(two.cloneNode(true));
+              break;
+            case "3":
+              drawScoreCountList.appendChild(three.cloneNode(true));
+              break;
+            case "4":
+              drawScoreCountList.appendChild(four.cloneNode(true));
+              break;
+            case "5":
+              drawScoreCountList.appendChild(five.cloneNode(true));
+              break;
+            case "6":
+              drawScoreCountList.appendChild(six.cloneNode(true));
+              break;
+            case "7":
+              drawScoreCountList.appendChild(seven.cloneNode(true));
+              break;
+            case "8":
+              drawScoreCountList.appendChild(eight.cloneNode(true));
+              break;
+            case "9":
+              drawScoreCountList.appendChild(nine.cloneNode(true));
               break;
           }
         }
@@ -246,6 +304,8 @@
                 gameState[snakePositions[0][0]][+snakePositions[0][1] + 1] == 2
               ) {
                 eatenFoodFlag = true;
+                score++;
+                eatApple.cloneNode(true).play();
                 snakePositions.unshift([
                   [snakePositions[0][0]],
                   [+snakePositions[0][1] + 1],
@@ -275,6 +335,8 @@
                 gameState[snakePositions[0][0]][+snakePositions[0][1] - 1] == 2
               ) {
                 eatenFoodFlag = true;
+                score++;
+                eatApple.cloneNode(true).play();
                 snakePositions.unshift([
                   [snakePositions[0][0]],
                   [+snakePositions[0][1] - 1],
@@ -304,6 +366,8 @@
                 gameState[+snakePositions[0][0] + 1][snakePositions[0][1]] == 2
               ) {
                 eatenFoodFlag = true;
+                score++;
+                eatApple.cloneNode(true).play();
                 snakePositions.unshift([
                   [+snakePositions[0][0] + 1],
                   [snakePositions[0][1]],
@@ -333,6 +397,8 @@
                 gameState[+snakePositions[0][0] - 1][snakePositions[0][1]] == 2
               ) {
                 eatenFoodFlag = true;
+                score++;
+                eatApple.cloneNode(true).play();
                 snakePositions.unshift([
                   [+snakePositions[0][0] - 1],
                   [snakePositions[0][1]],
@@ -346,28 +412,45 @@
             }
             break;
         }
-
         moveLock = false;
       }
 
       function generateNewFood() {
-        while (eatenFoodFlag && appleCount >= 0) {
-          let x = Math.floor(Math.random() * 20);
-          let y = Math.floor(Math.random() * 20);
-          if (gameState[x][y] == 0) {
-            gameState[x][y] = 2;
-            appleCount--;
-            if (appleCount == 0) {
-              appleCount++;
-              eatenFoodFlag = false;
+        var emptyList = [];
+        for (var i = 0; i < 20; i++) {
+          for (var j = 0; j < 20; j++) {
+            if (gameState[i][j] == 0) {
+              emptyList.push([[i], [j]]);
             }
+          }
+        }
+        while (eatenFoodFlag && appleCount >= 0 && emptyList.length > 0) {
+          let x = Math.floor(Math.random() * emptyList.length);
+          gameState[emptyList[x][0]][emptyList[x][1]] = 2;
+          emptyList.splice(x);
+          appleCount--;
+          if (appleCount == 0) {
+            appleCount++;
+            eatenFoodFlag = false;
           }
         }
       }
 
       function drawGameOver() {
+        drawState();
+        var increment = 0.04;
+        if (opacity <= 0.2 || opacity >= 1) {
+          opacityFlipSwitch = !opacityFlipSwitch;
+        }
+        if (opacityFlipSwitch) {
+          opacity -= increment;
+        } else {
+          opacity += increment;
+        }
+        ctx.globalAlpha = opacity;
         ctx.drawImage(gameOver, 185, 200);
         ctx.drawImage(pressRToRestart1, 195, 410);
+        ctx.globalAlpha = 1;
       }
 
       function restartGame() {
@@ -379,7 +462,10 @@
         gameState[5][0] = 1;
         snakeDirection = "right";
         snakePositions = [[5, 0]];
+        score = 1;
         appleCount = document.getElementById("apple-count").value;
+        opacity = 0.5;
+        opacityFlipSwitch = false;
         generateNewFood();
         drawState();
       }
@@ -393,6 +479,7 @@
               }
               updateState();
               drawState();
+              drawScoreCount();
             } else {
               if (restartFlag) {
                 restartGame();
