@@ -22,3 +22,33 @@
 body {
   background-color: #576d4d;
 }
+
+.play-button {
+  height: 50px;
+  background-color: #402d33;
+  color: #576d4d;
+  font-family: math;
+  font-size: x-large;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  display: block;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.button-option-list {
+  margin-top: 10px;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.apple-count-label {
+  margin-top: 10px;
+  white-space: nowrap;
+}
