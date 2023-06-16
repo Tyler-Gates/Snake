@@ -220,117 +220,73 @@ function drawState() {
   }
 }
 
+function processSnakeMovement(direction) {
+  var first, second, conditional, coordinate;
+  if (direction == "right" || direction == "down") {
+    if (direction == "right") {
+      first = 0;
+      second = 1;
+      coordinate = 1;
+    } else {
+      first = 1;
+      second = 0;
+      coordinate = 0;
+    }
+    conditional = +snakePositions[0][coordinate] + 1 < 20;
+  } else {
+    if (direction == "up") {
+      first = -1;
+      second = 0;
+      coordinate = 0;
+    } else {
+      first = 0;
+      second = -1;
+      coordinate = 1;
+    }
+    conditional = +snakePositions[0][coordinate] - 1 >= 0;
+  }
+
+  if (conditional) {
+    if (
+      gameState[+snakePositions[0][0] + first][
+        +snakePositions[0][1] + second
+      ] == 0
+    ) {
+      var newPosition = [
+        +snakePositions[0][0] + first,
+        +snakePositions[0][1] + second,
+      ];
+      var oldPosition = snakePositions.pop();
+      gameState[oldPosition[0]][oldPosition[1]] = 0;
+      snakePositions.unshift(newPosition);
+      gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
+    } else if (
+      gameState[+snakePositions[0][0] + first][
+        +snakePositions[0][1] + second
+      ] == 2
+    ) {
+      eatenFoodFlag = true;
+      score++;
+      eatApple.cloneNode(true).play();
+      snakePositions.unshift([
+        [+snakePositions[0][0] + first],
+        [+snakePositions[0][1] + second],
+      ]);
+      gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
+    } else {
+      aliveFlag = false;
+    }
+  } else {
+    aliveFlag = false;
+  }
+}
+
 function updateState() {
   if (!moveLock && queuedMove != "") {
     snakeDirection = queuedMove;
     queuedMove = "";
   }
-  switch (snakeDirection) {
-    case "right":
-      if (+snakePositions[0][1] + 1 < 20) {
-        if (gameState[snakePositions[0][0]][+snakePositions[0][1] + 1] == 0) {
-          var newPosition = [snakePositions[0][0], +snakePositions[0][1] + 1];
-          var oldPosition = snakePositions.pop();
-          gameState[oldPosition[0]][oldPosition[1]] = 0;
-          snakePositions.unshift(newPosition);
-          gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
-        } else if (
-          gameState[snakePositions[0][0]][+snakePositions[0][1] + 1] == 2
-        ) {
-          eatenFoodFlag = true;
-          score++;
-          eatApple.cloneNode(true).play();
-          snakePositions.unshift([
-            [snakePositions[0][0]],
-            [+snakePositions[0][1] + 1],
-          ]);
-          gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
-        } else {
-          aliveFlag = false;
-        }
-      } else {
-        aliveFlag = false;
-      }
-      break;
-    case "left":
-      if (+snakePositions[0][1] - 1 >= 0) {
-        if (gameState[snakePositions[0][0]][+snakePositions[0][1] - 1] == 0) {
-          var newPosition = [snakePositions[0][0], +snakePositions[0][1] - 1];
-          var oldPosition = snakePositions.pop();
-          gameState[oldPosition[0]][oldPosition[1]] = 0;
-          snakePositions.unshift(newPosition);
-          gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
-        } else if (
-          gameState[snakePositions[0][0]][+snakePositions[0][1] - 1] == 2
-        ) {
-          eatenFoodFlag = true;
-          score++;
-          eatApple.cloneNode(true).play();
-          snakePositions.unshift([
-            [snakePositions[0][0]],
-            [+snakePositions[0][1] - 1],
-          ]);
-          gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
-        } else {
-          aliveFlag = false;
-        }
-      } else {
-        aliveFlag = false;
-      }
-      break;
-    case "down":
-      if (+snakePositions[0][0] + 1 < 20) {
-        if (gameState[+snakePositions[0][0] + 1][snakePositions[0][1]] == 0) {
-          var newPosition = [+snakePositions[0][0] + 1, snakePositions[0][1]];
-          var oldPosition = snakePositions.pop();
-          gameState[oldPosition[0]][oldPosition[1]] = 0;
-          snakePositions.unshift(newPosition);
-          gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
-        } else if (
-          gameState[+snakePositions[0][0] + 1][snakePositions[0][1]] == 2
-        ) {
-          eatenFoodFlag = true;
-          score++;
-          eatApple.cloneNode(true).play();
-          snakePositions.unshift([
-            [+snakePositions[0][0] + 1],
-            [snakePositions[0][1]],
-          ]);
-          gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
-        } else {
-          aliveFlag = false;
-        }
-      } else {
-        aliveFlag = false;
-      }
-      break;
-    case "up":
-      if (+snakePositions[0][0] - 1 >= 0) {
-        if (gameState[+snakePositions[0][0] - 1][snakePositions[0][1]] == 0) {
-          var newPosition = [+snakePositions[0][0] - 1, snakePositions[0][1]];
-          var oldPosition = snakePositions.pop();
-          gameState[oldPosition[0]][oldPosition[1]] = 0;
-          snakePositions.unshift(newPosition);
-          gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
-        } else if (
-          gameState[+snakePositions[0][0] - 1][snakePositions[0][1]] == 2
-        ) {
-          eatenFoodFlag = true;
-          score++;
-          eatApple.cloneNode(true).play();
-          snakePositions.unshift([
-            [+snakePositions[0][0] - 1],
-            [snakePositions[0][1]],
-          ]);
-          gameState[snakePositions[0][0]][snakePositions[0][1]] = 1;
-        } else {
-          aliveFlag = false;
-        }
-      } else {
-        aliveFlag = false;
-      }
-      break;
-  }
+  processSnakeMovement(snakeDirection);
   moveLock = false;
 }
 
