@@ -54,6 +54,7 @@ zero.src = "img/zero.png";
 const scoreImage = new Image();
 scoreImage.src = "img/score.png";
 var score = 1;
+var highScore = 1;
 
 const musicButton = document.getElementById("music-button");
 var musicFlag = false;
@@ -98,12 +99,14 @@ var gameState = Array.from(Array(20), () => new Array(20).fill(0));
 gameState[5][0] = 1;
 
 const drawAppleCountList = document.getElementById("apple-count");
-const drawScoreCountList = document.getElementById("score-count");
-document.getElementById("score-count").value = score;
-drawScoreCount();
-
-document.getElementById("apple-count").value = appleCount;
+drawAppleCountList.value = appleCount;
 drawAppleCount();
+
+const drawScoreCountList = document.getElementById("score-count");
+drawScoreCountList.value = score;
+const drawHighScoreCountList = document.getElementById("high-score-count");
+drawHighScoreCountList.value = highScore;
+drawScoreCount();
 
 var opacity = 0.5;
 var opacityFlipSwitch = false;
@@ -184,6 +187,12 @@ function drawScoreCount() {
   const scoreCountString = score.toString();
   drawScoreCountList.innerHTML = "";
   drawNumbers(drawScoreCountList, scoreCountString);
+  if (score >= highScore) {
+    highScore = score;
+    const highScoreCountString = highScore.toString();
+    drawHighScoreCountList.innerHTML = "";
+    drawNumbers(drawHighScoreCountList, highScoreCountString);
+  }
 }
 
 function setSnakeDirection(desiredDirection, oppositeOfDesiredDirection) {

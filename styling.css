@@ -40,8 +40,8 @@ body {
 
 .score-container {
   margin-top: 10px;
-  display: flex;
   margin-left: 40px;
+  display: flex;
   justify-content: center;
   flex-direction: row;
   align-items: center;
