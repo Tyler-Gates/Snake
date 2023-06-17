@@ -9,8 +9,6 @@ var startGameFlag = false;
 var eatenFoodFlag = true;
 var aliveFlag = true;
 var restartFlag = false;
-const gameOver = new Image();
-gameOver.src = "img/gameover.png";
 
 const pressRToRestart1 = new Image();
 pressRToRestart1.src = "img/pressR1.png";
@@ -58,6 +56,13 @@ var highScore = 1;
 
 const musicButton = document.getElementById("music-button");
 var musicFlag = false;
+
+var pulsateLength = 1;
+var brightnessIncrement = 0.05;
+var brightnessBottom = 0.3;
+var brightnessTop = 1.7;
+var pulsateState = [];
+var pulsateSnakeLockFlag = true;
 
 function musicToggle() {
   if (musicFlag) {
@@ -108,7 +113,7 @@ const drawHighScoreCountList = document.getElementById("high-score-count");
 drawHighScoreCountList.value = highScore;
 drawScoreCount();
 
-var opacity = 0.5;
+var opacity = 0.4;
 var opacityFlipSwitch = false;
 
 var eatApple = new Audio("audio/eatApple.wav");
@@ -227,6 +232,7 @@ function handleKeyPress(event) {
     case 82:
       if (!aliveFlag) {
         restartFlag = true;
+        pulsateSnakeLockFlag = false;
       }
       break;
     case 32:
@@ -348,24 +354,57 @@ function generateNewFood() {
   }
 }
 
+function drawPulsatingSnake() {
+  for (var x = 0; x < pulsateLength; x++) {
+    if (pulsateSnakeLockFlag) {
+      if (pulsateState.length > x) {
+        if (pulsateState[x][1]) {
+          pulsateState[x][0] -= brightnessIncrement;
+        } else {
+          pulsateState[x][0] += brightnessIncrement;
+        }
+        if (
+          pulsateState[x][0] <= brightnessBottom ||
+          pulsateState[x][0] >= brightnessTop
+        ) {
+          pulsateState[x][1] = !pulsateState[x][1];
+        }
+      } else {
+        pulsateState.push([1 - brightnessIncrement, true]);
+      }
+      ctx.fillStyle = "#402d33";
+      ctx.filter = `brightness(${pulsateState[x][0]})`;
+      ctx.fillRect(
+        snakePositions[x][1] * 40,
+        snakePositions[x][0] * 40,
+        40,
+        40
+      );
+    }
+  }
+  ctx.filter = "brightness(1)";
+  if (pulsateLength < snakePositions.length) {
+    pulsateLength++;
+  }
+}
+
 function drawGameOver() {
   drawState();
-  incrementOpacity();
+  drawPulsatingSnake();
   ctx.globalAlpha = opacity;
-  ctx.drawImage(gameOver, 185, 200);
-  ctx.drawImage(pressRToRestart1, 195, 410);
+  ctx.drawImage(pressRToRestart1, 200, 300);
   ctx.globalAlpha = 1;
 }
 
 function incrementOpacity() {
-  var increment = 0.04;
+  var opacityIncrement = 0.04;
   if (opacity <= 0.2 || opacity >= 1) {
     opacityFlipSwitch = !opacityFlipSwitch;
   }
   if (opacityFlipSwitch) {
-    opacity -= increment;
+    opacity -= opacityIncrement;
   } else {
-    opacity += increment;
+    opacity += opacityIncrement;
   }
 }
 
@@ -375,12 +414,15 @@ function restartGame() {
   aliveFlag = true;
   queuedMove = [];
   restartFlag = false;
+  pulsateLength = 1;
+  pulsateState = [];
+  pulsateSnakeLockFlag = true;
   gameState[5][0] = 1;
   snakeDirection = "right";
   snakePositions = [[5, 0]];
   score = 1;
   appleCount = document.getElementById("apple-count").value;
-  opacity = 0.5;
+  opacity = 0.4;
   opacityFlipSwitch = false;
   generateNewFood();
   drawState();
