@@ -14,26 +14,28 @@
       width="800"
       height="800"
     ></canvas>
-    <div class="button-option-list">
-      <div class="apple-count-label">
+    <div class="score-container">
+      <div>
         <img src="img/score.png" />
-        <span id="score-count"></span>
+        <span class="number-display" id="score-count"></span>
       </div>
     </div>
-    <div class="button-option-list">
+    <div class="apple-music-container">
       <div class="apple-count-label">
         <img src="img/appleCount.png" />
-        <span id="apple-count"></span>
+        <span class="number-display" id="apple-count"></span>
       </div>
       <img
         src="img/minus.png"
+        height="100px"
         id="remove-apple-button"
         onclick="appleCountManipulator(false)"
       /><img
+        height="100px"
         src="img/plus.png"
         id="add-apple-button"
         onclick="appleCountManipulator(true)"
-      />
+      /><img id="music-button" src="img/musicOFF.png" onclick="musicToggle()" />
     </div>
 
     <script type="text/javascript" src="snakeGameLogic.js"></script>

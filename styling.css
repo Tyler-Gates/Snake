@@ -3,7 +3,7 @@
   text-align: center;
   font-family: math;
   margin: auto;
-  margin-top: 5vh;
+  margin-top: 4vh;
   margin-bottom: 2vh;
   display: flex;
 }
@@ -38,17 +38,30 @@ body {
   margin-top: 10px;
 }
 
-.button-option-list {
+.score-container {
   margin-top: 10px;
-  margin-right: auto;
-  margin-left: auto;
+  display: flex;
+  margin-left: 40px;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+}
+
+.apple-music-container {
   display: flex;
   justify-content: center;
   flex-direction: row;
+  align-items: center;
   gap: 30px;
 }
 
 .apple-count-label {
   margin-top: 10px;
   white-space: nowrap;
+}
+
+.number-display {
+  display: inline-block;
+  width: 120px;
 }

@@ -55,6 +55,18 @@ const scoreImage = new Image();
 scoreImage.src = "img/score.png";
 var score = 1;
 
+const musicButton = document.getElementById("music-button");
+var musicFlag = false;
+
+function musicToggle() {
+  if (musicFlag) {
+    musicButton.src = "img/musicOFF.png";
+  } else {
+    musicButton.src = "img/musicON.png";
+  }
+  musicFlag = !musicFlag;
+}
+
 const minusButton = document.getElementById("remove-apple-button");
 minusButton.addEventListener("mousedown", minusMouseDown);
 minusButton.addEventListener("mouseup", minusMouseUp);
@@ -99,6 +111,20 @@ var opacityFlipSwitch = false;
 var eatApple = new Audio("audio/eatApple.wav");
 
 window.addEventListener("keydown", handleKeyPress);
+
+window.addEventListener(
+  "keydown",
+  function (e) {
+    if (
+      ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(
+        e.code
+      ) > -1
+    ) {
+      e.preventDefault();
+    }
+  },
+  false
+);
 
 function appleCountManipulator(change) {
   appleCount = document.getElementById("apple-count").value;
@@ -267,7 +293,9 @@ function processSnakeMovement(direction) {
     ) {
       eatenFoodFlag = true;
       score++;
-      eatApple.cloneNode(true).play();
+      if (musicFlag) {
+        eatApple.cloneNode(true).play();
+      }
       snakePositions.unshift([
         [+snakePositions[0][0] + first],
         [+snakePositions[0][1] + second],
@@ -295,7 +323,7 @@ function generateNewFood() {
   for (var i = 0; i < 20; i++) {
     for (var j = 0; j < 20; j++) {
       if (gameState[i][j] == 0) {
-        emptyList.push([[i], [j]]);
+        emptyList.push([i, j]);
       }
     }
   }
