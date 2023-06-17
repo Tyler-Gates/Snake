@@ -54,8 +54,22 @@ scoreImage.src = "img/score.png";
 var score = 1;
 var highScore = 1;
 
+var eatApple = new Audio("audio/eatApple.wav");
 const musicButton = document.getElementById("music-button");
 var musicFlag = false;
+
+const drawAppleCountList = document.getElementById("apple-count");
+drawAppleCountList.value = appleCount;
+drawAppleCount();
+
+const drawScoreCountList = document.getElementById("score-count");
+drawScoreCountList.value = score;
+const drawHighScoreCountList = document.getElementById("high-score-count");
+drawHighScoreCountList.value = highScore;
+drawScoreCount();
+
+var opacity = 0.4;
+var opacityFlipSwitch = false;
 
 var pulsateLength = 1;
 var brightnessIncrement = 0.05;
@@ -63,6 +77,12 @@ var brightnessBottom = 0.3;
 var brightnessTop = 1.7;
 var pulsateState = [];
 var pulsateSnakeLockFlag = true;
+
+ctx.fillStyle = "#3f4f38";
+ctx.fillRect(0, 0, 800, 800);
+
+var gameState = Array.from(Array(20), () => new Array(20).fill(0));
+gameState[5][0] = 1;
 
 function musicToggle() {
   if (musicFlag) {
@@ -96,27 +116,6 @@ function plusMouseDown() {
 function plusMouseUp() {
   plusButton.src = "img/plus.png";
 }
-
-ctx.fillStyle = "#3f4f38";
-ctx.fillRect(0, 0, 800, 800);
-
-var gameState = Array.from(Array(20), () => new Array(20).fill(0));
-gameState[5][0] = 1;
-
-const drawAppleCountList = document.getElementById("apple-count");
-drawAppleCountList.value = appleCount;
-drawAppleCount();
-
-const drawScoreCountList = document.getElementById("score-count");
-drawScoreCountList.value = score;
-const drawHighScoreCountList = document.getElementById("high-score-count");
-drawHighScoreCountList.value = highScore;
-drawScoreCount();
-
-var opacity = 0.4;
-var opacityFlipSwitch = false;
-
-var eatApple = new Audio("audio/eatApple.wav");
 
 window.addEventListener("keydown", handleKeyPress);
 
