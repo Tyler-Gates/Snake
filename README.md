@@ -16,7 +16,7 @@ Creating Snake with my little brother on my week off
 
 This game is powered by an html canvas and a game loop that uses [requestAnimationFrame()](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame) to loop the process of updating then drawing state. Making use of setTimeout to set the desired speed of the loop and overall game.
 
-## Things I did because I thought they were cool
+## Things I did that I liked
 
 Fade in/out the controls at the beginning
 ![](/readmeImages/pulsatingControls.gif)
