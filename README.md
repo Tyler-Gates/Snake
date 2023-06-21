@@ -1,6 +1,7 @@
 # Snake
 
 can be played at https://tgates.icp.xyz/snake.html
+
 Creating Snake with my little brother on my week off
 ![Alt text](/readmeImages/image.png)
 
